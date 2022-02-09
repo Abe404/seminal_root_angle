@@ -334,6 +334,11 @@ def extract_all_angles(root_seg_dir, im_dataset_dir,
     """
     Go thorugh all images and extract all primary root angles (up to max 2 per image)
     """
+    # if the debug folder doesn't already exist then it will be created.
+    if not os.path.isdir(debug_image_dir):
+        print(f'Creating {debug_image_dir}')
+        os.makedirs(debug_image_dir)
+
     seg_fnames = os.listdir(seed_seg_dir)
     seg_fnames = [s for s in seg_fnames if '.png' in s]
     start = time.time()
