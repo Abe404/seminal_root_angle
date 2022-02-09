@@ -7,28 +7,30 @@ Used for high-throughput phenotyping of rhizobox images.
 
 Assuming the following folder structure:
 
-output
-data
-├── photos
-│   ├── photo1.JPG
-│   ├── photo2.JPG
-│   └── ....
-├── root_segmentations
-│   ├── photo1.png
-│   ├── photo2.png
-│   └── ....
-└── seed_segmentations
-    ├── photo1.png
-    └── photo2.png
-    └── ....
+    output
+    data
+    ├── photos
+    │   ├── photo1.JPG
+    │   ├── photo2.JPG
+    │   └── ....
+    ├── root_segmentations
+    │   ├── photo1.png
+    │   ├── photo2.png
+    │   └── ....
+    └── seed_segmentations
+        ├── photo1.png
+        └── photo2.png
+        └── ....
 
 Then the angles can be extracted to the output/angles.csv with the following python code:
 
-> from angle_extract import extract_all_angles
-> extract_all_angles(root_seg_dir='data/root_segmentations',
->                    im_dataset_dir='data/photos',
->                    seed_seg_dir='data/seed_segmentations',
->                    # this folder will be created if it doesn't already exist
->                    debug_image_dir='output/debug_images',
->                    output_csv_path='output/angles.csv',
->                    error_csv_path='output/errors.csv')
+```python
+from angle_extract import extract_all_angles
+extract_all_angles(root_seg_dir='data/root_segmentations',
+                   im_dataset_dir='data/photos',
+                   seed_seg_dir='data/seed_segmentations',
+                   # this folder will be created if it doesn't already exist
+                   debug_image_dir='output/debug_images',
+                   output_csv_path='output/angles.csv',
+                   error_csv_path='output/errors.csv')
+```
