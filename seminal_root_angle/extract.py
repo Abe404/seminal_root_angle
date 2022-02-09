@@ -304,17 +304,20 @@ def get_angles_from_image(seg_dataset_dir, im_dataset_dir, seed_seg_dir,
     Extract angles from {fname} and then save the output to csv_file
     and debug information to the debug_images folder.
     """
+    im = None
     # we don't know what extension the original files have. Go through the common ones
     for ext in ['.JPG', '.JPEG', '.PNG', '.TIFF']:
         path = os.path.join(im_dataset_dir, fname.replace('.png', ext))
         if os.path.isfile(path):
             im = imread(path)
             break
-        path = path.lower()
+        path = os.path.join(im_dataset_dir, fname.replace('.png', ext.lower()))
         if os.path.isfile(path):
             im = imread(path)
             break
-
+    if im is None:
+        raise Exception(f'Cound not find photo for {fname} in {im_dataset_dir}')
+    
     seg_im = imread(os.path.join(seg_dataset_dir, fname))[:, :, 3].astype(bool)
     seed_im = imread(os.path.join(seed_seg_dir, fname))[:, :, 3].astype(bool)
     skel = read_root_seg(seg_im)
@@ -343,7 +346,9 @@ def extract_all_angles(root_seg_dir, im_dataset_dir,
                        seed_seg_dir, max_seed_points_per_im,
                        debug_image_dir,
                        output_csv_path,
-                       error_csv_path):
+                       error_csv_path,
+                       radius=300):
+    assert radius >= 80, 'radius must be at least 80'
     """
     Go thorugh all images and extract all primary root angles (up to max 2 per image)
     """
@@ -367,7 +372,7 @@ def extract_all_angles(root_seg_dir, im_dataset_dir,
             get_angles_from_image(root_seg_dir, im_dataset_dir,
                                   seed_seg_dir,
                                   max_seed_points_per_im,
-                                  fname, 300,
+                                  fname, radius,
                                   csv_file, error_file,
                                   debug_image_dir)
         except Exception as error:
