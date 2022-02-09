@@ -35,9 +35,9 @@ import humanize
 from matplotlib import font_manager
 
 
-def load_seed_points(seg_im):
+def load_seed_points(seg_im, max_seed_points):
     """ extract seed point centroids for seed point segmentations """
-    # restrict to two largest regions
+    # restrict to largest regions
     label_img = label(seg_im)
     def pixelcount(regionmask):
         return np.sum(regionmask)
@@ -70,8 +70,10 @@ def load_seed_points(seg_im):
                                                               centroids,
                                                               seed_masks),
                                                           reverse=True))
-    # limit to 2 biggest (max)
-    return centroids[:2], seed_masks[:2], pixel_counts[:2]
+    # limit to max_seed_points_per_im biggest (max)
+    return (centroids[:max_seed_points],
+            seed_masks[:max_seed_points],
+            pixel_counts[:max_seed_points])
 
 def get_merged_debug_im(debug_ims):
     """ convert debug images to one image.
@@ -296,6 +298,7 @@ def add_text(image, text, x, y):
 
 
 def get_angles_from_image(seg_dataset_dir, im_dataset_dir, seed_seg_dir,
+                          max_seed_points_per_im,
                           fname, r, csv_file, error_file, debug_image_dir):
     """
     Extract angles from {fname} and then save the output to csv_file
@@ -306,8 +309,7 @@ def get_angles_from_image(seg_dataset_dir, im_dataset_dir, seed_seg_dir,
     seed_im = imread(os.path.join(seed_seg_dir, fname))[:, :, 3].astype(bool)
     skel = read_root_seg(seg_im)
 
-
-    centroids, seed_masks, seed_pixels = load_seed_points(seed_im)
+    centroids, seed_masks, seed_pixels = load_seed_points(seed_im, max_seed_points_per_im)
 
     for i, (c, seed_mask, seed_size) in enumerate(zip(centroids, seed_masks, seed_pixels)):
         angle_degrees, debug_image, error = get_primary_root_angle(c, r, im, seg_im,
@@ -328,7 +330,8 @@ def get_angles_from_image(seg_dataset_dir, im_dataset_dir, seed_seg_dir,
             #print('after save debug image')
 
 def extract_all_angles(root_seg_dir, im_dataset_dir,
-                       seed_seg_dir, debug_image_dir,
+                       seed_seg_dir, max_seed_points_per_im,
+                       debug_image_dir,
                        output_csv_path,
                        error_csv_path):
     """
@@ -352,7 +355,9 @@ def extract_all_angles(root_seg_dir, im_dataset_dir,
         print(f"Extracting angles:{seg_fnames.index(fname) + 1}/{len(seg_fnames)}", fname)
         try:
             get_angles_from_image(root_seg_dir, im_dataset_dir,
-                                  seed_seg_dir, fname, 300,
+                                  seed_seg_dir,
+                                  max_seed_points_per_im,
+                                  fname, 300,
                                   csv_file, error_file,
                                   debug_image_dir)
         except Exception as error:
