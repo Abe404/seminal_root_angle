@@ -329,8 +329,8 @@ def get_angles_from_image(seg_dataset_dir, im_dataset_dir, seed_seg_dir,
 
 def extract_all_angles(root_seg_dir, im_dataset_dir,
                        seed_seg_dir, debug_image_dir,
-                       output_csv_location,
-                       error_csv_location):
+                       output_csv_path,
+                       error_csv_path):
     """
     Go thorugh all images and extract all primary root angles (up to max 2 per image)
     """
@@ -343,8 +343,8 @@ def extract_all_angles(root_seg_dir, im_dataset_dir,
     seg_fnames = [s for s in seg_fnames if '.png' in s]
     start = time.time()
 
-    csv_file = open(output_csv_location, 'w+')
-    error_file = open(error_csv_location, 'w+')
+    csv_file = open(output_csv_path, 'w+')
+    error_file = open(error_csv_path, 'w+')
     print("file_name,angle_degrees,seed_index,seed_x,seed_y,seed_pixels", file=csv_file)
     print("file_name,error_message,seed_index,seed_x,seed_y,seed_pixels", file=error_file)
 
