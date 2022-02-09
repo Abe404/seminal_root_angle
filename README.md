@@ -3,6 +3,12 @@
 
 Used for high-throughput phenotyping of rhizobox images.
 
+### Install
+
+The latest version is available via PyPI (https://pypi.org/project/seminal-root-angle) for convenient installation with pip
+
+> pip install seminal-root-angle
+
 ### Example usage
 
 Assuming the following folder structure:
@@ -25,7 +31,7 @@ Assuming the following folder structure:
 Then the angles can be extracted to the output/angles.csv with the following python code:
 
 ```python
-from angle_extract import extract_all_angles
+from seminal_root_angle.extract import extract_all_angles
 extract_all_angles(root_seg_dir='data/root_segmentations',
                    im_dataset_dir='data/photos',
                    seed_seg_dir='data/seed_segmentations',
