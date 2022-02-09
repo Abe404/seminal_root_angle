@@ -308,11 +308,11 @@ def get_angles_from_image(seg_dataset_dir, im_dataset_dir, seed_seg_dir,
     for ext in ['.JPG', '.JPEG', '.PNG', '.TIFF']:
         path = os.path.join(im_dataset_dir, fname.replace('.png', ext))
         if os.path.isfile(path):
-            im = imread(os.path.join(im_dataset_dir, fname.replace('.png', path)))
+            im = imread(path)
             break
         path = path.lower()
         if os.path.isfile(path):
-            im = imread(os.path.join(im_dataset_dir, fname.replace('.png', path)))
+            im = imread(path)
             break
 
     seg_im = imread(os.path.join(seg_dataset_dir, fname))[:, :, 3].astype(bool)
