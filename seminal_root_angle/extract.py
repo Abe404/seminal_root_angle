@@ -304,7 +304,17 @@ def get_angles_from_image(seg_dataset_dir, im_dataset_dir, seed_seg_dir,
     Extract angles from {fname} and then save the output to csv_file
     and debug information to the debug_images folder.
     """
-    im = imread(os.path.join(im_dataset_dir, fname.replace('.png', '.JPG')))
+    # we don't know what extension the original files have. Go through the common ones
+    for ext in ['.JPG', '.JPEG', '.PNG', '.TIFF']:
+        path = os.path.join(im_dataset_dir, fname.replace('.png', ext))
+        if os.path.isfile(path):
+            im = imread(os.path.join(im_dataset_dir, fname.replace('.png', path)))
+            break
+        path = path.lower()
+        if os.path.isfile(path):
+            im = imread(os.path.join(im_dataset_dir, fname.replace('.png', path)))
+            break
+
     seg_im = imread(os.path.join(seg_dataset_dir, fname))[:, :, 3].astype(bool)
     seed_im = imread(os.path.join(seed_seg_dir, fname))[:, :, 3].astype(bool)
     skel = read_root_seg(seg_im)
