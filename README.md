@@ -29,7 +29,6 @@ from angle_extract import extract_all_angles
 extract_all_angles(root_seg_dir='data/root_segmentations',
                    im_dataset_dir='data/photos',
                    seed_seg_dir='data/seed_segmentations',
-                   # this folder will be created if it doesn't already exist
                    debug_image_dir='output/debug_images',
                    output_csv_path='output/angles.csv',
                    error_csv_path='output/errors.csv')
